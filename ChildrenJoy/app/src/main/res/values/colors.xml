@@ -3,4 +3,12 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <!--黄色背景-->
+    <color name="common_yellow">#FFF2C8</color>
+    <!--白色-->
+    <color name="common_white">#FFFFFF</color>
+    <!--棕色-->
+    <color name="common_brown">#DD8751</color>
+    <!--灰色-->
+    <color name="common_gray">#f0eff5</color>
 </resources>

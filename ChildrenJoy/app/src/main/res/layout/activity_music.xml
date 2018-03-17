@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/music_bg"
+    >
+    <include
+        android:id="@+id/title_title"
+        layout="@layout/common_title"
+        ></include>
+    <com.zhy.autolayout.AutoRelativeLayout
+        android:layout_below="@id/title_title"
+        android:id="@+id/top_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_80"
+        android:layout_marginLeft="@dimen/dimen_120"
+        android:layout_marginRight="@dimen/dimen_120"
+        >
+        <ImageView
+            android:id="@+id/big_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/selecter_small_size"
+            />
+
+        <ImageView
+            android:id="@+id/play_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_play_normal"
+            android:layout_centerInParent="true"
+            />
+
+        <ImageView
+            android:id="@+id/small_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/selecter_big_size"
+            android:layout_alignParentRight="true"
+            />
+    </com.zhy.autolayout.AutoRelativeLayout>
+    <TextView
+        android:layout_below="@id/top_title"
+        android:id="@+id/story_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/dimen_size_16"
+        android:textColor="@color/common_white"
+        android:layout_marginTop="@dimen/dimen_10"
+        android:lineSpacingExtra="@dimen/dimen_20"
+        />
+</com.zhy.autolayout.AutoRelativeLayout>

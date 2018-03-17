@@ -1,20 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="mjx.children.joy">
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+    <!--读取网络状态-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />    <!-- 如果需要精确定位的话请加上此权限 -->
 
     <application
+        android:name=".application.MainApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".HomeActivity">
+        <meta-data
+            android:name="design_width"
+            android:value="720">
+        </meta-data>
+        <meta-data
+            android:name="design_height"
+            android:value="1280">
+        </meta-data>
+        <service android:name="com.qq.e.comm.DownloadService" android:exported="false" />
+        <activity android:name="com.qq.e.ads.ADActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
+        <activity android:name="mjx.children.joy.business.splash.SplashActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name="mjx.children.joy.business.home.HomeActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name="mjx.children.joy.business.storydetail.StoryDetailActivity"
+            android:screenOrientation="portrait"
+            ></activity>
+        <activity android:name="mjx.children.joy.business.music.MusicActivity"
+            android:screenOrientation="portrait"
+            ></activity>
     </application>
 
 </manifest>
