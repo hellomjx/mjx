@@ -17,13 +17,13 @@ public class MainApplication extends Application {
     public static long lastTime;
     /*检测是否在启动页按下了home键*/
     public static boolean isClickHome = false;
-    public boolean isInterceptNet() {
-        return isInterceptNet;
-    }
-
-    public void setInterceptNet(boolean interceptNet) {
-        isInterceptNet = interceptNet;
-    }
+//    public boolean isInterceptNet() {
+//        return isInterceptNet;
+//    }
+//
+//    public void setInterceptNet(boolean interceptNet) {
+//        isInterceptNet = interceptNet;
+//    }
 
     private boolean isInterceptNet = false;
     private NetBroadcast mNetBroadcast;

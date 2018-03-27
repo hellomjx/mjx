@@ -19,6 +19,7 @@
     <dimen name="dimen_size_14">14sp</dimen>
     <dimen name="dimen_size_16">16sp</dimen>
     <dimen name="dimen_size_20">20sp</dimen>
+    <dimen name="dimen_size_24">24sp</dimen>
     <!--间距-->
     <dimen name="dimen_01">1px</dimen>
     <dimen name="dimen_05">5px</dimen>

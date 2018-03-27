@@ -2,7 +2,6 @@ package mjx.children.joy.business.music;
 
 import android.app.ProgressDialog;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,7 +11,6 @@ import java.io.File;
 import mjx.children.joy.R;
 import mjx.children.joy.application.MainApplication;
 import mjx.children.joy.base.BaseActivity;
-import mjx.children.joy.common.asycntask.MyAsycnTaks;
 import mjx.children.joy.data.sp.MusicInfoSp;
 import mjx.children.joy.utils.HttpDownloader;
 import mjx.children.joy.utils.LogUtil;
@@ -24,7 +22,7 @@ import mjx.children.joy.utils.ui.UIUtil;
  * 播放音乐
  * Created by MJX on 2018/3/16.
  */
-public class MusicActivity extends BaseActivity{
+public class MusicActivity2 extends BaseActivity{
 
     private TextView title;
     private ImageView backTv;
@@ -56,30 +54,51 @@ public class MusicActivity extends BaseActivity{
             title.setTypeface(MainApplication.getTypeFace());
             title.setText(title_name);
             content.setText(story_content);
-            if(httpDownloader == null){
-                httpDownloader = new HttpDownloader();
-            }
-            new MyAsycnTaks(){
 
-                @Override
-                public void preTask() {
-                    showProgress();
-                }
+//            mediaPlayer = new MediaPlayer();
+//            mediaPlayer.setDataSource("http://media.youban.com/"+story_link);
+//            mediaPlayer.prepare(); // 准备(File), 同步
 
+            mediaPlayer.setDataSource("http://media.youban.com/"+story_link); // 设置数据源为网络文件
+            mediaPlayer.prepareAsync(); // 准备(InputStream), 异步
+            showProgress();
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
-                public void doinBack() {
-                    downloadMusic(story_link,story_name);
-                }
-
-                @Override
-                public void postTask() {
+                public void onPrepared(MediaPlayer mp) {
+                    // 准备完成后, 开始播放音频文件
+                    mp.start();
                     hideProgress();
                 }
-            }.execute();
+            });
+
+
+
+
+
+//            if(httpDownloader == null){
+//                httpDownloader = new HttpDownloader();
+//            }
+//            new MyAsycnTaks(){
+//
+//                @Override
+//                public void preTask() {
+//                    showProgress();
+//                }
+//
+//                @Override
+//                public void doinBack() {
+//                    downloadMusic(story_link,story_name);
+//                }
+//
+//                @Override
+//                public void postTask() {
+//                    hideProgress();
+//                }
+//            }.execute();
         }catch (Exception e){
-            LogUtil.logMsg("下载音乐异常"+e.toString());
-            hideProgress();
-        }
+           LogUtil.logMsg("下载音乐异常"+e.toString());
+//           hideProgress();
+      }
 
     }
 
@@ -97,51 +116,59 @@ public class MusicActivity extends BaseActivity{
                 finish();
             }
         });
+//        playBt.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(isPlayingMusic){
+//                    return;
+//                }
+//                if(isShowBg){
+//                    playBt.setBackgroundResource(R.drawable.ic_play_normal);
+//                }else{
+//                    playBt.setBackgroundResource(R.drawable.ic_pause_normal);
+//                }
+//                isShowBg = !isShowBg;
+//                try {
+//                    if(mediaPlayer == null){
+//                        mediaPlayer = new MediaPlayer();
+//                    }
+//                    if(mediaPlayer != null){
+//                        isPlayingMusic = true;
+//                        mediaPlayer.setDataSource(MusicActivity2.this, Uri.parse("file://"+readMusicPath));
+//                        // 通过异步的方式装载媒体资源
+//                        mediaPlayer.prepareAsync();
+//                        //监听：准备完成的监听
+//                        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//                            @Override
+//                            public void onPrepared(MediaPlayer mediaPlayer) {
+//                                mediaPlayer.start();
+//                            }
+//                        });
+//
+//                        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//                            @Override
+//                            public void onCompletion(MediaPlayer mediaPlayer) {
+//                                if (mediaPlayer != null) {
+//                                    mediaPlayer.stop();
+//                                    mediaPlayer.release();
+//                                    isPlayingMusic = false;
+//                                }
+//                                setCheckPauseBg();
+//                            }
+//                        });
+//                        setCheckPlayingBg();
+//                    }
+//                }catch (Exception e){
+//                    LogUtil.logMsg("播放音乐信息异常"+e.toString());
+//                }
+//            }
+//        });
+
+
         playBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isPlayingMusic){
-                    return;
-                }
-                if(isShowBg){
-                    playBt.setBackgroundResource(R.drawable.ic_play_normal);
-                }else{
-                    playBt.setBackgroundResource(R.drawable.ic_pause_normal);
-                }
-                isShowBg = !isShowBg;
-                try {
-                    if(mediaPlayer == null){
-                        mediaPlayer = new MediaPlayer();
-                    }
-                    if(mediaPlayer != null){
-                        isPlayingMusic = true;
-                        mediaPlayer.setDataSource(MusicActivity.this, Uri.parse("file://"+readMusicPath));
-                        // 通过异步的方式装载媒体资源
-                        mediaPlayer.prepareAsync();
-                        //监听：准备完成的监听
-                        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                            @Override
-                            public void onPrepared(MediaPlayer mediaPlayer) {
-                                mediaPlayer.start();
-                            }
-                        });
 
-                        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                            @Override
-                            public void onCompletion(MediaPlayer mediaPlayer) {
-                                if (mediaPlayer != null) {
-                                    mediaPlayer.stop();
-                                    mediaPlayer.release();
-                                    isPlayingMusic = false;
-                                }
-                                setCheckPauseBg();
-                            }
-                        });
-                        setCheckPlayingBg();
-                    }
-                }catch (Exception e){
-                    LogUtil.logMsg("播放音乐信息异常"+e.toString());
-                }
             }
         });
 

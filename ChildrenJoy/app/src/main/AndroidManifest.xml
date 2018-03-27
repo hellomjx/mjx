@@ -42,6 +42,9 @@
         <activity android:name="mjx.children.joy.business.music.MusicActivity"
             android:screenOrientation="portrait"
             ></activity>
+        <activity android:name="mjx.children.joy.business.music.MusicActivity2"
+            android:screenOrientation="portrait"
+            ></activity>
     </application>
 
 </manifest>

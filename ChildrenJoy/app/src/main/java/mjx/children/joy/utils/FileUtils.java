@@ -1,12 +1,12 @@
 package mjx.children.joy.utils;
 
+import android.os.Environment;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import android.os.Environment;
 
 public class FileUtils {
 	private String SDPATH;
@@ -86,6 +86,74 @@ public class FileUtils {
 	public File createFilePath(String fileName) throws IOException {
 		File file = new File(SDPATH + fileName);
 		file.createNewFile();
+		return file;
+	}
+
+
+
+
+
+
+	/**
+	 * 将一个inputstream里面的数据写入SD卡中 第一个参数为目录名 第二个参数为文件名
+	 */
+	public File write2SDFromInput(String path, InputStream inputstream) {
+		File file = null;
+		OutputStream output = null;
+		try {
+			file = createSDFile(path);
+			output = new FileOutputStream(file);
+// 4k为单位，每4K写一次
+			byte buffer[] = new byte[4 * 1024];
+			int temp = 0;
+			while ((temp = inputstream.read(buffer)) != -1) {
+// 获取指定信,防止写入没用的信息
+				output.write(buffer, 0, temp);
+			}
+			output.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				output.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+
+		return file;
+	}
+
+
+	/**
+	 * 把下载的bundle压缩包写入
+	 */
+	public File writeForBundle(String path, InputStream inputstream){
+		File file = null;
+		OutputStream output = null;
+		try {
+//            file = createSDFile(path);
+			file = new File(path);
+
+			output = new FileOutputStream(file);
+// 4k为单位，每4K写一次
+			byte buffer[] = new byte[4 * 1024];
+			int temp = 0;
+			while ((temp = inputstream.read(buffer)) != -1) {
+// 获取指定信,防止写入没用的信息
+				output.write(buffer, 0, temp);
+			}
+			output.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				output.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		return file;
 	}
 }

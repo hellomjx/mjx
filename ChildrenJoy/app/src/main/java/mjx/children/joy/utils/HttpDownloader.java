@@ -97,7 +97,8 @@ public class HttpDownloader {
 		try {
 			FileUtils fileUtils = new FileUtils();
 			inputStream = getInputStreamFromUrl(urlStr);
-			File resultFile = fileUtils.write2SDFromInput(path, fileName, inputStream);
+//			File resultFile = fileUtils.write2SDFromInput(path, fileName, inputStream);
+			File resultFile = fileUtils.writeForBundle(path+fileName,inputStream);
 			if (resultFile == null) {
 				recodeCode = "-1";
 			}

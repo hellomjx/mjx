@@ -1,6 +1,7 @@
 package mjx.children.joy.utils.ui;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
@@ -68,5 +69,12 @@ public class UIUtil {
         return editText.getText().toString();
     }
 
+//    public static LayoutInflater getLayoutInflater(){
+//        return LayoutInflater.from(UIUtil.getContext());
+//    }
 
+
+    public static View getLayoutInflaterView(int viewId){
+        return LayoutInflater.from(UIUtil.getContext()).inflate(viewId,null);
+    }
 }

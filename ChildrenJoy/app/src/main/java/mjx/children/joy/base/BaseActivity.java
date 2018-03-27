@@ -1,21 +1,19 @@
 package mjx.children.joy.base;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import de.greenrobot.event.EventBus;
 import mjx.children.joy.R;
-import mjx.children.joy.common.Constants;
 import mjx.children.joy.event.NetEvent;
 import mjx.children.joy.manager.AppManager;
 import mjx.children.joy.utils.LogUtil;
 import mjx.children.joy.utils.net.CheckNet;
-import mjx.children.joy.utils.toast.ToastUtil;
 
 
 /**
@@ -44,57 +42,57 @@ public abstract class BaseActivity extends FragmentActivity {
      * 是否展示无网的标题提示
      */
     protected boolean isShowNoNetView = true;
-    /**
-     * 点击实体返回键是否，双击是否提示退出
-     */
-    protected boolean isDoubleBack = false;
-    /**
-     * 判断退出的时间
-     */
-    protected long exitTime = 0;
-
-    /**
-     * 是否点击了返回键,销毁当前的Fragment,true是点击了返回键，false是没有点击返回键
-     */
-     protected boolean isBackFragment = false;
-
-    public boolean isBackFragment() {
-        return isBackFragment;
-    }
-
-    public void setBackFragment(boolean backFragment) {
-        isBackFragment = backFragment;
-    }
+    protected View mView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.base_activity);
         initView();
-        initFragment();
+        initSubView();
+        initSubData();
         checkNet();
-        handleActivityKilledException();
         LogUtil.logMsg("父控件Activity创建"+this.getLocalClassName());
         AppManager.getAppManager().pushActivity(this);
     }
 
 
+
+
     private void initView() {
         baseFramelayout = (FrameLayout) findViewById(R.id.base_framelayout);
         noNetTitleView = (RelativeLayout) findViewById(R.id.no_net_title_view);
+        mView = subView();
+        baseFramelayout.addView(mView);
+        noNetTitleView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 跳转到系统的网络设置界面
+                Intent intent = null;
+                // 先判断当前系统版本
+                if(android.os.Build.VERSION.SDK_INT > 10){  // 3.0以上
+                    intent = new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS);
+                }else{
+                    intent = new Intent();
+                    intent.setClassName("com.android.settings", "com.android.settings.WirelessSettings");
+                }
+                startActivity(intent);
+            }
+        });
     }
-
 
     /**
-     * 返回帧布局的id
-     *
+     * 返回子布局
      * @return
      */
-    public int getBaseFrameLayoutId() {
-        return R.id.base_framelayout;
-    }
+    public abstract View subView();
 
-
+    /**
+     * 数据
+     * @return
+     */
+    public abstract void initSubData();
+    public abstract void initSubView();
     @Override
     protected void onResume() {
         super.onResume();
@@ -132,40 +130,14 @@ public abstract class BaseActivity extends FragmentActivity {
         boolean netFlag = event.getMsg();
         if (netFlag) {
             noNetTitleView.setVisibility(View.GONE);
-            haveNetrefreshData();
         } else {
             if (isShowNoNetView) {
                 noNetTitleView.setVisibility(View.VISIBLE);
-                noNetRefreshData();
             }
         }
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK
-                && event.getAction() == KeyEvent.ACTION_DOWN) {
-            if (isDoubleBack) {
-                if (System.currentTimeMillis() - exitTime > Constants.DOUBLE_BACK_INTERVAL) {
-                    ToastUtil.toastDes("再按一次退出登录");
-                    exitTime = System.currentTimeMillis();
-                    return true;
-                } else {
-                    if (!getFragmentManager().popBackStackImmediate()) {
-                        isFinishCurrentActivity();
-                    }
-                    getFragmentManager().popBackStackImmediate();
-                }
-            } else {
-                if (!getFragmentManager().popBackStackImmediate()) {
-                    isFinishCurrentActivity();
-                }
-                getFragmentManager().popBackStackImmediate();
-                setBackFragment(true);
-            }
-        }
-        return super.onKeyDown(keyCode, event);
-    }
+
 
 
     @Override
@@ -173,48 +145,7 @@ public abstract class BaseActivity extends FragmentActivity {
         super.onDestroy();
         LogUtil.logMsg("父控件Activity销毁"+this.getLocalClassName());
         AppManager.getAppManager().popActivity(this);
-        clearData();
         EventBus.getDefault().unregister(this);
     }
-
-    /**
-     * 子页面无网，需要进行的处理
-     */
-    protected  void noNetRefreshData(){
-
-    }
-
-
-    /**
-     * 界面展示使用Fragment
-     */
-    protected abstract void initFragment();
-
-    /**
-     * Activity异常情况被杀死杀死
-     */
-    protected abstract void handleActivityKilledException();
-
-
-    /**
-     * 子界面的初始化数据
-     */
-    protected abstract void initSubData();
-
-    /**
-     * Activity销毁时，清除数据
-     */
-    protected abstract void clearData();
-
-    /**
-     * 是否关闭Activity
-     */
-    protected abstract void isFinishCurrentActivity();
-
-    /**
-     * 有网络刷新数据
-     */
-    protected abstract void haveNetrefreshData();
-
 
 }

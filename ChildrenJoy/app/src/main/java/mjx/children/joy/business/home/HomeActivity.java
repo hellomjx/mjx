@@ -1,23 +1,22 @@
 package mjx.children.joy.business.home;
 
-import android.app.Activity;
-import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import mjx.children.joy.R;
+import mjx.children.joy.base.BaseActivity;
 import mjx.children.joy.business.home.adapter.MyAdapter;
 import mjx.children.joy.utils.HttpDownloader;
+import mjx.children.joy.utils.ui.UIUtil;
 
-public class HomeActivity extends Activity {
+public class HomeActivity extends BaseActivity {
 
     //    private Button mButton;
     private String SDPATH;
@@ -25,33 +24,48 @@ public class HomeActivity extends Activity {
     private Map<Integer, String> dataMap = new HashMap<>();
     List<Integer> list = new ArrayList<>();
 
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_home);
+//        initData();
+////        mButton = (Button) findViewById(R.id.button);
+//        viewPager = (ViewPager) findViewById(R.id.viewpager);
+//
+//        initViewPagerData();
+//
+////        mButton.setOnClickListener(new View.OnClickListener() {
+////            @Override
+////            public void onClick(View v) {
+////                try{
+////                    File file = createFile();
+////                    String SDPATH = Environment.getExternalStorageDirectory()+ File.separator;
+////                    String packageName = getPackageName();
+////                    File file1 = new File(SDPATH + "/"+packageName+"/a1.mp3");
+////                    file1.createNewFile();
+////                    downloadMusic();
+////                }catch (Exception e){
+////                    e.toString();
+////                }
+////        List<DataBean> antusheng = XmlData.getData("antusheng.xml");
+////            }
+////        });
+//
+//    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        initData();
-//        mButton = (Button) findViewById(R.id.button);
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
+    public View subView() {
+        return UIUtil.getLayoutInflaterView(R.layout.activity_home);
+    }
 
+    @Override
+    public void initSubData() {
         initViewPagerData();
+    }
 
-//        mButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                try{
-//                    File file = createFile();
-//                    String SDPATH = Environment.getExternalStorageDirectory()+ File.separator;
-//                    String packageName = getPackageName();
-//                    File file1 = new File(SDPATH + "/"+packageName+"/a1.mp3");
-//                    file1.createNewFile();
-//                    downloadMusic();
-//                }catch (Exception e){
-//                    e.toString();
-//                }
-//        List<DataBean> antusheng = XmlData.getData("antusheng.xml");
-//            }
-//        });
-
+    @Override
+    public void initSubView() {
+        viewPager = (ViewPager) mView.findViewById(R.id.viewpager);
     }
 
     private void initViewPagerData() {

@@ -23,10 +23,10 @@ public class NetBroadcast extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         /*拦截第一次动态注册时候，两次刷新界面*/
-        if (MainApplication.getInstance().isInterceptNet()) {
-            MainApplication.getInstance().setInterceptNet(false);
-            return;
-        }
+//        if (MainApplication.getInstance().isInterceptNet()) {
+//            MainApplication.getInstance().setInterceptNet(false);
+//            return;
+//        }
         String action = intent.getAction();
         if (TextUtils.equals(action, "android.net.conn.CONNECTIVITY_CHANGE")) {//网络变化的时候会发送通知
             ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
