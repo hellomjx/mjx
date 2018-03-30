@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<com.zhy.autolayout.AutoRelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#00000000"
@@ -17,10 +16,9 @@
 
         <ImageView
             android:id="@+id/imageview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dimen_400"
+            android:layout_height="@dimen/dimen_500"
             android:scaleType="fitXY"
-
             />
     </com.zhy.autolayout.AutoRelativeLayout>
-</RelativeLayout>
+</com.zhy.autolayout.AutoRelativeLayout>

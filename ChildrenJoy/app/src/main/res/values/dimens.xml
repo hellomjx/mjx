@@ -65,5 +65,7 @@
     <dimen name="dimen_172">172px</dimen>
     <dimen name="dimen_200">200px</dimen>
     <dimen name="dimen_350">350px</dimen>
+    <dimen name="dimen_400">450px</dimen>
+    <dimen name="dimen_500">550px</dimen>
 
 </resources>

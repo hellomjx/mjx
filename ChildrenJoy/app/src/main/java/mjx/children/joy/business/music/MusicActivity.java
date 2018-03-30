@@ -42,7 +42,8 @@ public class MusicActivity extends BaseActivity{
     //展示的背景播放图，true播放，false暂停
     private boolean isShowBg = false;
     private CheckTextUtil mCheckTextUtil;
-
+    //记录如果已经初始化过，就不用再初始化
+    private boolean isFirstPlaying = true;
     private void initData() {
         try {
             mediaPlayer = new MediaPlayer();
@@ -76,12 +77,50 @@ public class MusicActivity extends BaseActivity{
                     hideProgress();
                 }
             }.execute();
+
         }catch (Exception e){
             LogUtil.logMsg("下载音乐异常"+e.toString());
             hideProgress();
         }
 
     }
+
+
+    private void initMediaPlayer(){
+        try {
+            if(mediaPlayer == null){
+                mediaPlayer = new MediaPlayer();
+            }
+            if(mediaPlayer != null){
+                isPlayingMusic = true;
+                mediaPlayer.setDataSource(MusicActivity.this, Uri.parse("file://"+readMusicPath));
+                // 通过异步的方式装载媒体资源
+                mediaPlayer.prepareAsync();
+                //监听：准备完成的监听
+                mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mediaPlayer) {
+                        mediaPlayer.start();
+                    }
+                });
+
+                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mediaPlayer) {
+                        if (mediaPlayer != null) {
+                            mediaPlayer.stop();
+                            mediaPlayer.release();
+                            isPlayingMusic = false;
+                        }
+                    }
+                });
+                setCheckPlayingBg();
+            }
+        }catch (Exception e){
+            LogUtil.logMsg("播放音乐信息异常"+e.toString());
+        }
+    }
+
 
     private void initView() {
         title = (TextView) mView.findViewById(R.id.common_title);
@@ -100,47 +139,11 @@ public class MusicActivity extends BaseActivity{
         playBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isPlayingMusic){
-                    return;
-                }
-                if(isShowBg){
-                    playBt.setBackgroundResource(R.drawable.ic_play_normal);
-                }else{
-                    playBt.setBackgroundResource(R.drawable.ic_pause_normal);
-                }
-                isShowBg = !isShowBg;
-                try {
-                    if(mediaPlayer == null){
-                        mediaPlayer = new MediaPlayer();
-                    }
-                    if(mediaPlayer != null){
-                        isPlayingMusic = true;
-                        mediaPlayer.setDataSource(MusicActivity.this, Uri.parse("file://"+readMusicPath));
-                        // 通过异步的方式装载媒体资源
-                        mediaPlayer.prepareAsync();
-                        //监听：准备完成的监听
-                        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                            @Override
-                            public void onPrepared(MediaPlayer mediaPlayer) {
-                                mediaPlayer.start();
-                            }
-                        });
-
-                        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                            @Override
-                            public void onCompletion(MediaPlayer mediaPlayer) {
-                                if (mediaPlayer != null) {
-                                    mediaPlayer.stop();
-                                    mediaPlayer.release();
-                                    isPlayingMusic = false;
-                                }
-                                setCheckPauseBg();
-                            }
-                        });
-                        setCheckPlayingBg();
-                    }
-                }catch (Exception e){
-                    LogUtil.logMsg("播放音乐信息异常"+e.toString());
+                if(isFirstPlaying){
+                    initMediaPlayer();
+                    isFirstPlaying = false;
+                }else {
+                    changePlayState();
                 }
             }
         });
@@ -208,6 +211,9 @@ public class MusicActivity extends BaseActivity{
 
     private void showProgress(){
         if(progressDialog != null){
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setCancelable(false);
+            progressDialog.setMessage("故事加载中...");
             progressDialog.show();
         }
     }
@@ -284,5 +290,23 @@ public class MusicActivity extends BaseActivity{
         }
         default_size_font = default_size_font + countNum;
         content.setTextSize(default_size_font);
+    }
+
+    /**
+     * 切换播放的状态
+     */
+    private void changePlayState(){
+        if(isShowBg){
+            setCheckPauseBg();
+            if(mediaPlayer != null){
+                mediaPlayer.pause();
+            }
+        }else{
+            setCheckPlayingBg();
+            if(mediaPlayer != null){
+                mediaPlayer.start();
+            }
+        }
+        isShowBg = !isShowBg;
     }
 }

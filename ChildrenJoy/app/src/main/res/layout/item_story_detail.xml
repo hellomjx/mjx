@@ -16,12 +16,11 @@
         android:id="@+id/name"
         android:layout_width="@dimen/dimen_350"
         android:layout_height="match_parent"
-        android:text="大嘎嘎"
-        android:gravity="center"
         android:textSize="@dimen/dimen_size_20"
         android:layout_marginRight="@dimen/dimen_20"
         android:layout_marginLeft="@dimen/dimen_20"
         android:textColor="@color/common_white"
+        android:gravity="center_vertical"
         />
     <ImageView
         android:layout_alignParentRight="true"
